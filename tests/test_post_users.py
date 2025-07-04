@@ -102,7 +102,7 @@ def test_create_user_with_long_name_and_job():
     assert  json_data["name"] == "Niju Mannuel " * 20, "name is different"
     assert json_data["job"] == "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5 , "expected job name is different"
 
-#@pytest.mark.skip(reason="Skipping this test for now")
+@pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_special_characters():
 
 

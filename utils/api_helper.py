@@ -36,3 +36,13 @@ def post(endpoint, json=None):
         "x-api-key": "reqres-free-v1"
     }
     return requests.post(f"{BASE_URL}{endpoint}", json=json, headers=headers)
+
+def update(endpoint, json=None):
+    headers = {
+        "x-api-key": "reqres-free-v1"
+    }
+    return requests.put(f"{BASE_URL}{endpoint}", json=json, headers=headers)
+
+def update_jph(endpoint, json=None):
+
+    return requests.put(f"{base_url_jph}{endpoint}", json=json)
