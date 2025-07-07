@@ -1,7 +1,9 @@
 import pytest
 
 from utils.api_helper import post, logger
-from utils.assertions import assert_status_code
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
+from utils.logs import log_response_details
+
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_login_successful():
@@ -15,9 +17,10 @@ def test_login_successful():
     # Assert response status
     assert_status_code(response, 200)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_login_with_invalid_email():
@@ -31,11 +34,12 @@ def test_login_with_invalid_email():
     # Assert response status
     assert_status_code(response, 400)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
-@pytest.mark.skip(reason="Skipping this test for now")
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
+
+#@pytest.mark.skip(reason="Skipping this test for now")
 def test_login_with_missing_password():
     payload = {
     "email": "peter@klaven"
@@ -46,10 +50,11 @@ def test_login_with_missing_password():
     # Assert response status
     assert_status_code(response, 400)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert "error" in json_data
     assert json_data["error"] == "Missing password"
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)

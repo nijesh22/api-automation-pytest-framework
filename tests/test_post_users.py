@@ -1,6 +1,6 @@
 import pytest
 from utils.api_helper import post
-from utils.assertions import assert_status_code
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
 from utils.logger import Logger
 
 logger = Logger.get_logger()
@@ -27,6 +27,9 @@ def test_create_user_with_valid_data():
     assert json_data["job"] == "QA Engineer"
     assert "createdAt" in json_data
 
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
+
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_empty_name():
 
@@ -44,6 +47,9 @@ def test_create_user_with_empty_name():
     json_data = response.json()
     logger.info(f"Created User data with empty name : {json_data}")
     assert json_data["name"] == "" , "expected name to be empty"
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_empty_job():
@@ -64,6 +70,9 @@ def test_create_user_with_empty_job():
     logger.info(f"Created User data with empty job name : {json_data}")
     assert  json_data["job"] == "", "expected job to be empty"
 
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
+
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_with_empty_payload():
 
@@ -83,6 +92,9 @@ def test_create_with_empty_payload():
     assert "name" not in json_data
     assert "job" not in json_data
 
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
+
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_long_name_and_job():
 
@@ -101,6 +113,9 @@ def test_create_user_with_long_name_and_job():
     logger.info(f"Created User data with empty job name : {json_data}")
     assert  json_data["name"] == "Niju Mannuel " * 20, "name is different"
     assert json_data["job"] == "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5 , "expected job name is different"
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_special_characters():
@@ -123,3 +138,6 @@ def test_create_user_with_special_characters():
     assert json_data["name"] == "John@@@"
     assert json_data["job"] == "QA Engineer/@*"
     assert "createdAt" in json_data
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)

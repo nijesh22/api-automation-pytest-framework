@@ -1,7 +1,7 @@
 import pytest
-
 from utils.api_helper import post, logger, update
-from utils.assertions import assert_status_code
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
+from utils.logs import log_response_details
 
 
 @pytest.mark.skip(reason="Skipping this test for now")
@@ -16,14 +16,15 @@ def test_update_user_with_valid_data():
     # Assert response status
     assert_status_code(response, 200)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert json_data["name"] == "morpheus updated"
     assert json_data["job"] == "zion resident updated"
     assert "updatedAt" in json_data
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_update_user_with_empty_body():
@@ -34,13 +35,14 @@ def test_update_user_with_empty_body():
     # Assert response status
     assert_status_code(response, 200)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert "updatedAt" in json_data
     assert len(json_data) == 1
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_update_user_with_invalid_id():
@@ -54,9 +56,10 @@ def test_update_user_with_invalid_id():
     # Assert response status
     assert_status_code(response, 404)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_update_user_with_special_characters():
@@ -70,14 +73,15 @@ def test_update_user_with_special_characters():
     # Assert response status
     assert_status_code(response, 200)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert json_data["name"] == "morpheus@@@@"
     assert json_data["job"] == "zion resident@@@@"
     assert "updatedAt" in json_data
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_update_user_extra_keys():
@@ -93,11 +97,12 @@ def test_update_user_extra_keys():
     # Assert response status
     assert_status_code(response, 404)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert json_data["name"] == "morpheus@@@@"
     assert json_data["job"] == "zion resident@@@@"
     assert "updatedAt" in json_data
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)

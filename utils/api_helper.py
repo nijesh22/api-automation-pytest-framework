@@ -46,3 +46,14 @@ def update(endpoint, json=None):
 def update_jph(endpoint, json=None):
 
     return requests.put(f"{base_url_jph}{endpoint}", json=json)
+
+def delete(endpoint, json=None):
+    headers = {
+        "x-api-key": "reqres-free-v1"
+    }
+
+    return requests.delete(f"{BASE_URL}{endpoint}", json=json, headers=headers)
+
+def delete_jph(endpoint, json=None):
+
+    return requests.delete(f"{base_url_jph}{endpoint}", json=json)

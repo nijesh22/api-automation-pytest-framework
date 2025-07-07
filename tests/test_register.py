@@ -1,7 +1,7 @@
 import pytest
-
 from utils.api_helper import post, logger
-from utils.assertions import assert_status_code
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
+from utils.logs import log_response_details
 
 
 @pytest.mark.skip(reason="Skipping this test for now")
@@ -16,12 +16,13 @@ def test_register_with_valid_email_password():
     # Assert response status
     assert_status_code(response, 200)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert "token" in json_data, "Token not found in response"
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_register_with_existing_user():
@@ -35,9 +36,10 @@ def test_register_with_existing_user():
     # Assert response status
     assert_status_code(response, 400)
 
-    logger.info(f"URL: {response.request.url}")
-    logger.info(f"Status Code: {response.status_code}")
-    logger.info(f"Response: {response.text}")
+    log_response_details(response)
 
     json_data = response.json()
     assert "error" in json_data, "error not found in response"
+
+    assert_response_time_under(response, 2)
+    assert_content_type_json(response)
