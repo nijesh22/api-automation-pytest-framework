@@ -1,6 +1,4 @@
 import pytest
-
-from utils.api_helper import logger
 from utils.assertions import assert_status_code, assert_response_key_exists, assert_empty_response, \
    assert_content_type_json, assert_response_time_under
 from utils.endpoints import get_users_by_page, get_users_by_valid_id

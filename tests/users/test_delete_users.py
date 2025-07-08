@@ -1,6 +1,5 @@
 import pytest
-
-from utils.api_helper import update, delete, logger, delete_jph
+from utils.api_helper import delete, delete_jph
 from utils.assertions import assert_status_code, assert_response_time_under
 from utils.logs import log_response_details
 

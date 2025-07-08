@@ -1,17 +1,15 @@
 import pytest
 from utils.api_helper import post, logger
 from utils.assertions import assert_status_code, assert_content_type_json, \
-  assert_response_time_under
+    assert_response_time_under, assert_post_creation_response
 from utils.logs import log_response_details
+from utils.payloads import create_post_payload
 
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_post_with_title_and_body():
-    payload = {
 
-    "title": "new title",
-    "body": "new body"
-  }
+    payload = create_post_payload(title="new title", body="new body")
 
     response = post("/posts", json=payload)
 
@@ -20,10 +18,8 @@ def test_create_post_with_title_and_body():
     log_response_details(response)
 
     json_data = response.json()
-    assert "id" in json_data
-    assert json_data["title"] == "new title"
-    assert json_data["body"] == "new body"
-    assert "createdAt" in json_data
+
+    assert_post_creation_response(json_data, "new title", "new body")
 
     assert_response_time_under(response, 2)
 
@@ -31,11 +27,8 @@ def test_create_post_with_title_and_body():
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_post_with_missing_title():
-    payload = {
 
-    "title": "",
-    "body": "new body"
-  }
+    payload = create_post_payload(title="", body="new body")
 
     response = post("/posts", json=payload)
 
@@ -45,10 +38,8 @@ def test_create_post_with_missing_title():
     log_response_details(response)
 
     json_data = response.json()
-    assert "id" in json_data
-    assert json_data["title"] == ""
-    assert json_data["body"] == "new body"
-    assert "createdAt" in json_data
+
+    assert_post_creation_response(json_data, "", "new body")
 
     assert_response_time_under(response, 2)
 

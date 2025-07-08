@@ -1,18 +1,16 @@
 import pytest
 from utils.api_helper import post
-from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under, \
+    assert_user_creation_response, assert_user_fields
 from utils.logger import Logger
+from utils.payloads import create_user_payload
 
 logger = Logger.get_logger()
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_valid_data():
 
-
-    payload = {
-        "name": "John",
-        "job": "QA Engineer"
-    }
+    payload = create_user_payload("John", "QA Engineer")
 
     response = post("/users", json=payload)
 
@@ -21,11 +19,10 @@ def test_create_user_with_valid_data():
 
     # Assert keys exist
     json_data = response.json()
-    logger.info(f"Created User : {json_data}")
-    assert "id" in json_data
-    assert json_data["name"] == "John"
-    assert json_data["job"] == "QA Engineer"
-    assert "createdAt" in json_data
+
+    assert_user_creation_response(json_data, "John", "QA Engineer")
+
+
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -33,10 +30,7 @@ def test_create_user_with_valid_data():
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_empty_name():
 
-    payload = {
-        "name": "",
-        "job": "QA Engineer"
-    }
+    payload = create_user_payload("", "QA Engineer")
 
     response = post("/users", json=payload)
 
@@ -45,8 +39,8 @@ def test_create_user_with_empty_name():
 
     # Assert keys exist
     json_data = response.json()
-    logger.info(f"Created User data with empty name : {json_data}")
-    assert json_data["name"] == "" , "expected name to be empty"
+    assert_user_fields(json_data, "", "QA Engineer")
+
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -54,11 +48,7 @@ def test_create_user_with_empty_name():
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_empty_job():
 
-
-    payload = {
-        "name": "niju mannuel",
-        "job": ""
-    }
+    payload = create_user_payload("niju mannuel", "")
 
     response = post("/users", json=payload)
 
@@ -67,8 +57,9 @@ def test_create_user_with_empty_job():
 
     # Assert keys exist
     json_data = response.json()
-    logger.info(f"Created User data with empty job name : {json_data}")
-    assert  json_data["job"] == "", "expected job to be empty"
+
+    assert_user_fields(json_data, "niju mannuel", "")
+
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -98,10 +89,7 @@ def test_create_with_empty_payload():
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_long_name_and_job():
 
-    payload = {
-        "name": "Niju Mannuel " * 20,  # ~260+ characters
-        "job": "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5  # ~350+ characters
-    }
+    payload = create_user_payload("Niju Mannuel " * 20, "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5)
 
     response = post("/users", json=payload)
 
@@ -110,9 +98,8 @@ def test_create_user_with_long_name_and_job():
 
     # Assert keys exist
     json_data = response.json()
-    logger.info(f"Created User data with empty job name : {json_data}")
-    assert  json_data["name"] == "Niju Mannuel " * 20, "name is different"
-    assert json_data["job"] == "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5 , "expected job name is different"
+
+    assert_user_fields(json_data, "Niju Mannuel " * 20, "Senior Lead Principal Architect Automation Expert DevOps Cloud Specialist " * 5)
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -120,11 +107,7 @@ def test_create_user_with_long_name_and_job():
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_create_user_with_special_characters():
 
-
-    payload = {
-        "name": "John@@@",
-        "job": "QA Engineer/@*"
-    }
+    payload = create_user_payload("John@@@", "QA Engineer/@*")
 
     response = post("/users", json=payload)
 
@@ -133,11 +116,8 @@ def test_create_user_with_special_characters():
 
     # Assert keys exist
     json_data = response.json()
-    logger.info(f"Created User : {json_data}")
-    assert "id" in json_data
-    assert json_data["name"] == "John@@@"
-    assert json_data["job"] == "QA Engineer/@*"
-    assert "createdAt" in json_data
+
+    assert_user_creation_response(json_data, "John", "QA Engineer")
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)

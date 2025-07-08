@@ -1,6 +1,7 @@
 import pytest
 from utils.api_helper import get_post
-from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
+from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under, \
+    assert_comment_schema, assert_list_response, assert_empty_list_response_0
 from utils.logger import Logger
 
 logger = Logger.get_logger()
@@ -10,11 +11,7 @@ def test_get_all_comments():
    response = get_post("/comments")
    assert_status_code(response, 200)
    for comment in response.json():
-       assert "postId" in comment
-       assert "id" in comment
-       assert "name" in comment
-       assert "email" in comment
-       assert "body" in comment
+       assert_comment_schema(comment)
 
    assert_response_time_under(response, 2)
 
@@ -26,11 +23,7 @@ def test_get_comments_by_id():
     response = get_post("/comments/1")
     assert_status_code(response, 200)
     comment = response.json()
-    assert "postId" in comment
-    assert "id" in comment
-    assert "name" in comment
-    assert "email" in comment
-    assert "body" in comment
+    assert_comment_schema(comment)
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -40,9 +33,7 @@ def test_get_comments_by_post_id():
     response = get_post("/comments?postId=1")
     assert_status_code(response, 200)
     json_data = response.json()
-    assert isinstance(json_data, list), "Expected a list of post id"
-    assert len(json_data) > 0, "Expected at least one post id"
-    logger.info(f"Total post id received: {len(json_data)}")
+    assert_list_response(json_data, empty_msg="Expected at least one post id", type_msg="Expected a list of post id")
 
 
     assert_response_time_under(response, 2)
@@ -53,8 +44,8 @@ def test_get_comments_by_invalid_post_id():
     response = get_post("/comments?postId=111")
     assert_status_code(response, 200)
     json_body = response.json()
-    assert isinstance(json_body, list), "Expected a list of post id"
-    assert len(json_body) == 0, "Expected no comments for invalid postId"
+
+    assert_empty_list_response_0(json_body, label="comments")
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
@@ -65,9 +56,9 @@ def test_get_comments_by_large_post_id():
     response = get_post("/comments?postId=100")
     assert_status_code(response, 200)
     json_data = response.json()
-    assert isinstance(json_data, list), "Expected a list of comments"
-    assert len(json_data) > 0, "Expected at least one comment for postId=100"
-    logger.info(f"Total comments received for postId=100 : {len(json_data)}")
+    assert_list_response(json_data, empty_msg="Expected at least one comment for postId=100", type_msg="Expected a list of comments")
+
+
 
     assert_response_time_under(response, 2)
     assert_content_type_json(response)

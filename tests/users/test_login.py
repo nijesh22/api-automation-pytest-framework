@@ -1,16 +1,14 @@
 import pytest
-
 from utils.api_helper import post, logger
 from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
 from utils.logs import log_response_details
+from utils.payloads import create_login_payload
 
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_login_successful():
-    payload = {
-        "email": "eve.holt@reqres.in",
-        "password": "cityslicka"
-    }
+
+    payload = create_login_payload("eve.holt@reqres.in", "cityslicka")
 
     response = post("/login", json=payload)
 
@@ -24,10 +22,8 @@ def test_login_successful():
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_login_with_invalid_email():
-    payload = {
-        "email": "invalidtest@gmail.com",
-        "password": "cityslicka"
-    }
+
+    payload = create_login_payload("invalidtest@gmail.com", "cityslicka")
 
     response = post("/login", json=payload)
 
@@ -39,11 +35,10 @@ def test_login_with_invalid_email():
     assert_response_time_under(response, 2)
     assert_content_type_json(response)
 
-#@pytest.mark.skip(reason="Skipping this test for now")
+@pytest.mark.skip(reason="Skipping this test for now")
 def test_login_with_missing_password():
-    payload = {
-    "email": "peter@klaven"
-}
+
+    payload = create_login_payload("peter@klaven" )
 
     response = post("/login", json=payload)
 

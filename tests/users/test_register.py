@@ -2,14 +2,12 @@ import pytest
 from utils.api_helper import post, logger
 from utils.assertions import assert_status_code, assert_content_type_json, assert_response_time_under
 from utils.logs import log_response_details
-
+from utils.payloads import create_register_payload
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_register_with_valid_email_password():
-    payload = {
-    "email": "eve.holt@reqres.in",
-    "password": "pistol"
-}
+
+    payload = create_register_payload("eve.holt@reqres.in", "pistol")
 
     response = post("/register", json=payload)
 
@@ -26,10 +24,8 @@ def test_register_with_valid_email_password():
 
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_register_with_existing_user():
-    payload = {
-        "email": "",
-        "password": "pistol"
-    }
+
+    payload = create_register_payload("", "pistol")
 
     response = post("/register", json=payload)
 
