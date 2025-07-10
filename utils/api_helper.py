@@ -1,6 +1,5 @@
 import requests
 import configparser
-
 from utils.logger import Logger
 
 # Load base URL from config
