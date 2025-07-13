@@ -1,14 +1,34 @@
+@REM @echo off
+@REM echo ✅ Activating virtual environment...
+@REM call .\venv\Scripts\activate
+@REM
+@REM echo Installing dependencies...
+@REM pip install -r requirements.txt
+@REM
+@REM echo Running tests and generating Allure results...
+@REM pytest --alluredir=allure-results
+@REM
+@REM echo Generating Allure HTML report...
+@REM allure generate allure-results --clean -o allure-report
+@REM
+@REM echo Allure report generated at allure-report\index.html
+
 @echo off
+
 echo ✅ Activating virtual environment...
-call .\venv\Scripts\activate
+call .\venv\Scripts\activate || exit /b 1
+
+echo 🔍 Python version:
+python --version || exit /b 1
 
 echo Installing dependencies...
-pip install -r requirements.txt
+pip install -r requirements.txt || exit /b 1
 
-echo Running tests and generating Allure results...
-pytest --alluredir=allure-results
+echo 🧪 Running tests and generating Allure results...
+pytest --alluredir=allure-results || exit /b 1
 
-echo Generating Allure HTML report...
-allure generate allure-results --clean -o allure-report
+echo 📊 Generating Allure HTML report...
+allure generate allure-results --clean -o allure-report || exit /b 1
 
-echo Allure report generated at allure-report\index.html
+echo ✅ Allure report generated at allure-report\index.html
+

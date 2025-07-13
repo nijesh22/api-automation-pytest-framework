@@ -16,3 +16,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Run tests and generate allure-results
 CMD ["sh", "-c", "pytest --alluredir=allure-results && allure generate allure-results -o allure-report --clean"]
+
