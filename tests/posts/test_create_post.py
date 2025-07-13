@@ -12,7 +12,7 @@ def test_create_post_with_title_and_body():
 
     response = post("/posts", json=payload)
 
-    assert_status_code(response, 201)
+    assert_status_code(response, 201111)
     log_response_details(response)
 
     json_data = response.json()
@@ -30,7 +30,7 @@ def test_create_post_with_missing_title():
 
     response = post("/posts", json=payload)
 
-    assert_status_code(response, 201)
+    assert_status_code(response, 20111)
 
     log_response_details(response)
 
