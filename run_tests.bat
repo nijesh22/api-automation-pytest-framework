@@ -24,8 +24,9 @@ call venv\Scripts\activate.bat || exit /b 1
 echo 🔍 Python version:
 python --version || exit /b 1
 
-echo Installing dependencies...
-pip install -r requirements.txt || exit /b 1
+echo 🔄 Installing dependencies...
+python -m pip install --upgrade pip || exit /b 1
+python -m pip install -r requirements.txt || exit /b 1
 
 echo 🧪 Running tests and generating Allure results...
 pytest --alluredir=allure-results || exit /b 1
