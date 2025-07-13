@@ -15,8 +15,11 @@
 
 @echo off
 
+echo ✅ Creating virtual environment...
+python -m venv venv || exit /b 1
+
 echo ✅ Activating virtual environment...
-call .\venv\Scripts\activate || exit /b 1
+call venv\Scripts\activate.bat || exit /b 1
 
 echo 🔍 Python version:
 python --version || exit /b 1
